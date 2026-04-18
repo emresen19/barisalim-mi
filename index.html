@@ -2,23 +2,22 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bir Şans Daha?</title>
-  <meta name="theme-color" content="#0f0a14" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bir Şans Daha</title>
+  <meta name="theme-color" content="#150f1d" />
   <style>
     :root{
-      --bg-1:#0f0a14;
-      --bg-2:#1a1024;
-      --bg-3:#261327;
-      --glass:rgba(255,255,255,.08);
-      --glass-strong:rgba(255,255,255,.12);
+      --bg:#150f1d;
+      --bg2:#24132b;
+      --card:rgba(18,16,22,.52);
+      --card-2:rgba(255,255,255,.08);
       --stroke:rgba(255,255,255,.14);
-      --text:#f8eef7;
-      --muted:#ccb9c8;
-      --pink:#ff5fa2;
-      --pink-2:#ff8bbb;
-      --pink-3:#ffc1da;
-      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --text:#fff7fb;
+      --muted:#e4d6df;
+      --pink:#ff5e9f;
+      --pink2:#ff93c1;
+      --pink3:#ffd8e9;
+      --shadow:0 22px 60px rgba(0,0,0,.38);
       --radius:28px;
     }
 
@@ -29,150 +28,191 @@
 
     html,body{
       margin:0;
-      padding:0;
       min-height:100%;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(circle at 10% 20%, rgba(255,95,162,.18), transparent 28%),
-        radial-gradient(circle at 80% 15%, rgba(255,139,187,.12), transparent 25%),
-        radial-gradient(circle at 75% 75%, rgba(145,88,255,.14), transparent 30%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
-      overflow:hidden;
+      background:linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
     }
 
     body{
+      min-height:100svh;
+      padding:
+        max(14px, env(safe-area-inset-top))
+        14px
+        max(18px, env(safe-area-inset-bottom))
+        14px;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:18px;
       position:relative;
     }
 
-    .noise,
-    .lights,
-    .particles{
+    .bg,
+    .overlay,
+    .grain,
+    .vignette{
       position:fixed;
       inset:0;
       pointer-events:none;
     }
 
-    .noise{
+    .bg{
+      background-image:url("ani.jpg");
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.06);
+      filter:brightness(.48) contrast(1.05) saturate(1.04);
+    }
+
+    .overlay{
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,94,159,.24), transparent 28%),
+        radial-gradient(circle at 82% 15%, rgba(162,104,255,.18), transparent 30%),
+        linear-gradient(180deg, rgba(16,11,21,.22), rgba(16,11,21,.56) 35%, rgba(16,11,21,.82));
+    }
+
+    .vignette{
+      box-shadow:inset 0 0 140px rgba(0,0,0,.45);
+    }
+
+    .grain{
       opacity:.05;
-      background-image:
-        radial-gradient(circle, #fff 1px, transparent 1px);
+      background-image:radial-gradient(circle, rgba(255,255,255,.9) 1px, transparent 1px);
       background-size:18px 18px;
       mix-blend-mode:soft-light;
     }
 
-    .lights::before,
-    .lights::after{
-      content:"";
-      position:absolute;
-      width:38vmax;
-      height:38vmax;
-      border-radius:50%;
-      filter:blur(70px);
-      opacity:.22;
-      animation:floatGlow 10s ease-in-out infinite alternate;
-    }
-
-    .lights::before{
-      background:#ff4e95;
-      left:-10vmax;
-      top:-8vmax;
-    }
-
-    .lights::after{
-      background:#8e53ff;
-      right:-10vmax;
-      bottom:-12vmax;
-      animation-duration:13s;
-    }
-
-    @keyframes floatGlow{
-      from{transform:translateY(-10px) translateX(0) scale(1);}
-      to{transform:translateY(18px) translateX(10px) scale(1.08);}
-    }
-
-    .shell{
+    .app{
       width:min(100%, 430px);
       position:relative;
       z-index:2;
     }
 
-    .card{
-      position:relative;
-      overflow:hidden;
-      border-radius:var(--radius);
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border:1px solid var(--stroke);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+    .shell{
+      background:linear-gradient(180deg, rgba(18,16,22,.56), rgba(18,16,22,.42));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:34px;
+      backdrop-filter:blur(22px);
+      -webkit-backdrop-filter:blur(22px);
       box-shadow:var(--shadow);
-      padding:22px 18px 18px;
-      min-height:720px;
+      overflow:hidden;
+      position:relative;
     }
 
-    .card::before{
+    .shell::before{
       content:"";
       position:absolute;
-      inset:-1px;
-      border-radius:inherit;
-      padding:1px;
-      background:linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,0), rgba(255,95,162,.25));
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor;
-              mask-composite:exclude;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
       pointer-events:none;
+    }
+
+    .screen{
+      position:relative;
+      z-index:1;
+      padding:16px;
     }
 
     .topbar{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      margin-bottom:18px;
+      gap:10px;
+      margin-bottom:14px;
     }
 
-    .badge,
-    .mini-chip{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      color:var(--muted);
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
       border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:#f0dde7;
       font-size:12px;
-      letter-spacing:.3px;
-      padding:8px 12px;
-      backdrop-filter: blur(10px);
+      line-height:1;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
     }
 
-    .hero{
-      padding:8px 4px 4px;
+    .dot{
+      width:22px;
+      height:22px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+      font-weight:800;
+      color:#fff;
+      font-size:12px;
+    }
+
+    .photo{
       position:relative;
+      margin-bottom:16px;
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 14px 36px rgba(0,0,0,.26);
+      aspect-ratio: 9 / 10;
+      background:#111;
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+    }
+
+    .photo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.04), transparent 35%, rgba(0,0,0,.28)),
+        linear-gradient(135deg, rgba(255,255,255,.12), transparent 20%, transparent 80%, rgba(255,255,255,.06));
+      pointer-events:none;
+    }
+
+    .memory-tag{
+      position:absolute;
+      left:12px;
+      bottom:12px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(17,14,22,.54);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:#fff4fa;
+      font-size:11px;
+      letter-spacing:.2px;
       z-index:2;
     }
 
     .eyebrow{
-      color:var(--pink-3);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:1.2px;
+      color:var(--pink3);
       text-transform:uppercase;
-      margin-bottom:12px;
-      opacity:.92;
+      letter-spacing:1.4px;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:8px;
     }
 
     h1{
-      margin:0 0 12px;
-      font-size:clamp(30px, 7vw, 44px);
+      margin:0 0 10px;
+      font-size:clamp(31px, 8vw, 42px);
       line-height:1.02;
       letter-spacing:-1.2px;
+      text-wrap:balance;
     }
 
-    .gradient{
-      background:linear-gradient(135deg, #fff, #ffd3e5 35%, #ff89ba 75%);
+    .accent{
+      background:linear-gradient(135deg, #fff, #ffd5e6 38%, #ff8cbe 84%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -182,53 +222,33 @@
       margin:0;
       color:var(--muted);
       font-size:15px;
-      line-height:1.65;
+      line-height:1.68;
     }
 
-    .divider{
-      height:1px;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
-      margin:18px 0;
+    .note{
+      margin-top:14px;
+      padding:14px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.06);
     }
 
-    .memory{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      border-radius:22px;
-      padding:16px;
-      margin-bottom:18px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .memory::after{
-      content:"";
-      position:absolute;
-      inset:auto -40px -40px auto;
-      width:120px;
-      height:120px;
-      background:radial-gradient(circle, rgba(255,95,162,.26), transparent 68%);
-      filter:blur(10px);
-      pointer-events:none;
-    }
-
-    .memory-title{
+    .note b{
+      display:block;
+      color:#ffe1ee;
       font-size:13px;
-      color:#f8d4e6;
-      opacity:.9;
-      margin-bottom:8px;
-      font-weight:700;
+      margin-bottom:7px;
     }
 
-    .memory p{
+    .note p{
       margin:0;
+      color:#f0e0e8;
       font-size:14px;
-      line-height:1.65;
-      color:#ebdfe7;
+      line-height:1.62;
     }
 
     .question{
-      padding:4px 2px 0;
+      margin-top:16px;
       text-align:center;
     }
 
@@ -239,65 +259,56 @@
     }
 
     .question p{
-      margin:0 auto 18px;
-      max-width:300px;
+      margin:0 auto 14px;
+      max-width:290px;
       color:var(--muted);
       font-size:14px;
-      line-height:1.6;
+      line-height:1.58;
     }
 
-    .button-stage{
+    .stage{
       position:relative;
-      height:240px;
-      border-radius:24px;
+      min-height:210px;
+      height:min(31svh, 240px);
+      border-radius:22px;
+      overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)),
-        radial-gradient(circle at top, rgba(255,95,162,.10), transparent 40%);
-      overflow:hidden;
+        radial-gradient(circle at top, rgba(255,94,159,.14), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
     }
 
-    .button-center{
+    .yes-wrap{
       position:absolute;
       left:50%;
       top:54%;
-      transform:translate(-50%,-50%);
+      transform:translate(-50%, -50%);
       z-index:2;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      width:max-content;
     }
 
     button{
       appearance:none;
       border:none;
       cursor:pointer;
-      font-weight:700;
       border-radius:999px;
-      transition:transform .25s ease, box-shadow .25s ease, opacity .25s ease, background .25s ease;
+      font-weight:800;
+      transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease, left .18s ease, top .18s ease;
       touch-action:manipulation;
+      user-select:none;
+      -webkit-user-select:none;
     }
 
     #yesBtn{
-      color:white;
-      background:linear-gradient(135deg, var(--pink), var(--pink-2));
+      color:#fff;
+      background:linear-gradient(135deg, var(--pink), var(--pink2));
+      padding:17px 30px;
+      min-width:136px;
+      font-size:18px;
       box-shadow:
-        0 16px 36px rgba(255,95,162,.35),
+        0 14px 30px rgba(255,94,159,.34),
         inset 0 1px 0 rgba(255,255,255,.28);
-      font-size:20px;
-      padding:18px 34px;
-      min-width:148px;
-      position:relative;
-    }
-
-    #yesBtn::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius:inherit;
-      background:linear-gradient(135deg, rgba(255,255,255,.45), rgba(255,255,255,0));
-      opacity:.3;
-      pointer-events:none;
+      transform:scale(1);
     }
 
     #yesBtn:active{
@@ -308,116 +319,152 @@
       position:absolute;
       left:58%;
       top:54%;
-      transform:translate(-50%,-50%);
+      transform:translate(-50%, -50%);
       background:rgba(255,255,255,.08);
-      color:#ffe4ef;
+      color:#ffe9f2;
       border:1px solid rgba(255,255,255,.12);
-      padding:15px 24px;
-      font-size:16px;
+      padding:14px 20px;
+      font-size:15px;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
       z-index:3;
-      backdrop-filter: blur(10px);
-      box-shadow:0 8px 24px rgba(0,0,0,.18);
       max-width:150px;
       white-space:nowrap;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
     }
 
     .subnote{
+      min-height:18px;
+      margin-top:12px;
       text-align:center;
       font-size:12px;
-      color:#d8bfd0;
-      margin-top:14px;
-      opacity:.85;
-      min-height:18px;
+      color:#ddc4d2;
+      opacity:.95;
+    }
+
+    .mini-grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .mini{
+      padding:12px 13px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.045);
+    }
+
+    .mini b{
+      display:block;
+      font-size:12px;
+      margin-bottom:6px;
+      color:#f9dceb;
+    }
+
+    .mini span{
+      display:block;
+      font-size:13px;
+      line-height:1.54;
+      color:#ecdde5;
     }
 
     .final{
       display:none;
-      min-height:660px;
-      position:relative;
-      justify-content:center;
+      min-height:min(86svh, 760px);
       align-items:center;
-      text-align:center;
-      padding:30px 14px 16px;
+      justify-content:center;
       flex-direction:column;
-      animation:fadeUp .6s ease both;
+      text-align:center;
+      padding:24px 16px 18px;
+      position:relative;
+    }
+
+    .final.show{
+      display:flex;
+      animation:fadeUp .55s ease both;
     }
 
     .halo{
-      width:168px;
-      height:168px;
-      border-radius:50%;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,.55) 0%, rgba(255,193,218,.38) 20%, rgba(255,95,162,.20) 40%, transparent 68%);
-      filter:blur(6px);
       position:absolute;
-      top:44px;
+      top:28px;
       left:50%;
       transform:translateX(-50%);
-      animation:pulse 2.8s ease-in-out infinite;
+      width:170px;
+      height:170px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.34) 0%, rgba(255,216,233,.26) 24%, rgba(255,94,159,.16) 48%, transparent 72%);
+      filter:blur(8px);
+      animation:pulse 3s ease-in-out infinite;
+      pointer-events:none;
     }
 
-    @keyframes pulse{
-      0%,100%{transform:translateX(-50%) scale(1); opacity:.9;}
-      50%{transform:translateX(-50%) scale(1.08); opacity:1;}
-    }
-
-    .final-mark{
+    .final-photo{
+      width:min(78vw, 250px);
+      aspect-ratio:1/1;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 18px 46px rgba(0,0,0,.28);
       position:relative;
       z-index:2;
-      width:116px;
-      height:116px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      font-size:44px;
-      background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:0 18px 50px rgba(0,0,0,.24);
-      margin-bottom:22px;
+      margin-bottom:16px;
+      background:#111;
+    }
+
+    .final-photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
     .final h3{
-      position:relative;
-      z-index:2;
       margin:0 0 10px;
-      font-size:34px;
+      font-size:32px;
+      line-height:1.02;
       letter-spacing:-1px;
+      z-index:2;
+      position:relative;
+      text-wrap:balance;
     }
 
-    .final .name{
-      background:linear-gradient(135deg, #fff, #ffd9ea 40%, #ff8fbd 85%);
+    .name{
+      background:linear-gradient(135deg, #fff, #ffd8e8 40%, #ff91c0 84%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
     }
 
-    .final .bigline{
-      position:relative;
+    .final p{
+      margin:0;
+      max-width:295px;
+      color:#f1e0ea;
+      line-height:1.68;
+      font-size:15px;
       z-index:2;
-      margin:0 0 14px;
-      color:#f1dfea;
-      font-size:16px;
-      line-height:1.7;
-      max-width:290px;
+      position:relative;
     }
 
     .promise{
-      position:relative;
-      z-index:2;
       width:100%;
-      border-radius:22px;
+      max-width:320px;
+      margin-top:16px;
+      text-align:left;
+      border-radius:20px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.06);
-      padding:16px;
-      text-align:left;
-      max-width:320px;
+      padding:15px;
+      z-index:2;
+      position:relative;
     }
 
     .promise-title{
       font-size:13px;
-      color:#ffd7e6;
+      color:#ffdeeb;
+      font-weight:800;
       margin-bottom:10px;
-      font-weight:700;
     }
 
     .promise ul{
@@ -425,193 +472,210 @@
       padding:0;
       margin:0;
       display:grid;
-      gap:10px;
+      gap:9px;
     }
 
     .promise li{
-      color:#ebdfe7;
-      font-size:14px;
-      line-height:1.5;
       display:flex;
-      gap:10px;
+      gap:9px;
       align-items:flex-start;
+      color:#ebdde5;
+      font-size:14px;
+      line-height:1.48;
     }
 
     .promise li span{
-      width:22px;
-      height:22px;
-      display:inline-grid;
-      place-items:center;
+      width:21px;
+      height:21px;
       border-radius:50%;
-      background:rgba(255,95,162,.14);
-      border:1px solid rgba(255,95,162,.20);
-      flex:0 0 22px;
+      display:grid;
+      place-items:center;
+      background:rgba(255,94,159,.14);
+      border:1px solid rgba(255,94,159,.22);
+      flex:0 0 21px;
       font-size:12px;
     }
 
-    .footer-note{
-      position:relative;
+    .final-date{
+      margin-top:14px;
+      color:#d9c0ce;
+      font-size:12px;
       z-index:2;
-      margin-top:16px;
-      color:#cdb7c6;
-      font-size:12px;
-      opacity:.9;
+      position:relative;
     }
 
-    @keyframes fadeUp{
-      from{opacity:0; transform:translateY(16px);}
-      to{opacity:1; transform:translateY(0);}
+    .particle-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:1;
     }
 
     .particle{
       position:absolute;
-      width:8px;
-      height:8px;
+      bottom:-20px;
       border-radius:50%;
       background:radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0));
-      opacity:.4;
-      animation:rise linear infinite;
+      opacity:.35;
+      animation:rise linear forwards;
     }
 
     @keyframes rise{
-      from{transform:translateY(20px) scale(.8); opacity:0;}
-      15%{opacity:.35;}
-      to{transform:translateY(-120vh) scale(1.4); opacity:0;}
+      from{ transform:translateY(20px) scale(.8); opacity:0; }
+      15%{ opacity:.35; }
+      to{ transform:translateY(-115svh) scale(1.35); opacity:0; }
     }
 
-    .shake{
-      animation:shake .25s linear;
+    @keyframes pulse{
+      0%,100%{ transform:translateX(-50%) scale(1); opacity:.88; }
+      50%{ transform:translateX(-50%) scale(1.08); opacity:1; }
     }
 
-    @keyframes shake{
-      0%,100%{transform:translateX(0);}
-      25%{transform:translateX(-4px);}
-      50%{transform:translateX(4px);}
-      75%{transform:translateX(-2px);}
+    @keyframes fadeUp{
+      from{ opacity:0; transform:translateY(14px); }
+      to{ opacity:1; transform:translateY(0); }
     }
 
-    @media (max-width:380px){
-      .card{min-height:690px;padding:18px 14px 14px;}
-      .button-stage{height:220px;}
-      #yesBtn{font-size:18px;padding:16px 28px;min-width:136px;}
-      #noBtn{font-size:15px;padding:14px 20px;}
-      h1{font-size:29px;}
+    @media (min-width:390px){
+      .mini-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+      .screen{
+        padding:18px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <div class="lights"></div>
-  <div class="particles" id="particles"></div>
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <div class="particle-layer" id="particleLayer"></div>
 
-  <div class="shell">
-    <div class="card">
-      <section id="questionScreen">
+  <main class="app">
+    <section class="shell">
+      <section class="screen" id="questionScreen">
         <div class="topbar">
-          <div class="badge" id="dateText">16.10.2024</div>
-          <div class="mini-chip">for E</div>
+          <div class="chip">
+            <span class="dot" id="shortName">E</span>
+            <span>bir şans daha</span>
+          </div>
+          <div class="chip" id="dateText">16.10.2024</div>
         </div>
 
-        <div class="hero">
-          <div class="eyebrow">bir şey söylemek istiyorum</div>
-          <h1>
-            Bu sefer <span class="gradient">gerçekten</span><br />
-            düzgün anlatacağım.
-          </h1>
-          <p class="lead">
-            Bazı şeyleri yanlış yaptım. Lafı uzatmadan, savunmaya kaçmadan,
-            sadece şunu söylemek istiyorum:
-          </p>
+        <div class="photo">
+          <img src="ani.jpg" alt="Anı fotoğrafı" />
+          <div class="memory-tag">güzel bir anı</div>
         </div>
 
-        <div class="divider"></div>
+        <div class="eyebrow">bu kez gerçekten</div>
+        <h1>Bir şeyi <span class="accent">düzeltmek</span> istiyorum.</h1>
+        <p class="lead">
+          Lafı dolandırmadan söyleyeyim. Kırdıysam bunu geçiştirmek değil, toparlamak istiyorum.
+          Savunmaya kaçmadan, daha düzgün davranmak istiyorum.
+        </p>
 
-        <div class="memory">
-          <div class="memory-title">Not</div>
+        <div class="note">
+          <b>Not</b>
           <p id="mainText">
-            Seni kırdıysam bunun yükünü geçiştirmek istemiyorum.
-            Eksik olan şey bahane değil, daha iyi davranmaktı.
-            Bir şans daha verir misin sevgilim?
+            Bu sayfa sadece tatlı görünsün diye yapılmadı. Gerçekten bir şans daha isteyecek kadar ciddiyim.
           </p>
         </div>
 
         <div class="question">
-          <h2 id="questionTitle">Benimle yeniden güler misin?</h2>
+          <h2 id="questionTitle">Benimle yeniden konuşur musun?</h2>
           <p id="questionDesc">
-            Bir kere “evet” desen yeter. Gerisini ben halledicem.
+            Sadece bir evet. Gerisini lafla değil, tavırla göstermek istiyorum.
           </p>
 
-          <div class="button-stage" id="buttonStage">
-            <div class="button-center">
+          <div class="stage" id="stage">
+            <div class="yes-wrap">
               <button id="yesBtn">Evet</button>
             </div>
             <button id="noBtn">Hayır</button>
           </div>
 
-          <div class="subnote" id="subnote">Buna basmak aslında düşündüğünden kolay.</div>
+          <div class="subnote" id="subnote">Buna basmak düşündüğünden kolay.</div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini">
+            <b>Niyet</b>
+            <span>İkna etmek değil, ciddiye aldığımı göstermek.</span>
+          </div>
+          <div class="mini">
+            <b>Fark</b>
+            <span>Bahane değil, daha temiz davranış.</span>
+          </div>
+          <div class="mini">
+            <b>Sonuç</b>
+            <span>Yarım kalanı düzgün tamamlamak.</span>
+          </div>
         </div>
       </section>
 
       <section class="final" id="finalScreen">
         <div class="halo"></div>
-        <div class="final-mark">♡</div>
+
+        <div class="final-photo">
+          <img src="ani.jpg" alt="Anı fotoğrafı" />
+        </div>
+
         <h3><span class="name" id="finalName">Esma</span>, teşekkür ederim.</h3>
-        <p class="bigline" id="finalText">
-          Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için
-          daha dikkatli, daha temiz, daha doğru davranacağım.
+        <p id="finalText">
+          Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için daha dikkatli davranacağım.
         </p>
 
         <div class="promise">
           <div class="promise-title">Sana hissettirmek istediğim şey:</div>
           <ul>
-            <li><span>✓</span> değersiz değil, kıymetli olduğunu</li>
-            <li><span>✓</span> yorulmuş değil, huzurlu olman gerektiğini</li>
-            <li><span>✓</span> söz değil, emek gördüğünü</li>
+            <li><span>✓</span> kıymetli olduğunu</li>
+            <li><span>✓</span> yorulmak yerine huzur bulman gerektiğini</li>
+            <li><span>✓</span> söz değil emek gördüğünü</li>
           </ul>
         </div>
 
-        <div class="footer-note" id="footerDate">16.10.2024 • yeni bir sayfa?</div>
+        <div class="final-date" id="footerDate">16.10.2024 • yeni bir sayfa?</div>
       </section>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
     const CONFIG = {
       name: "Esma",
       shortName: "E",
       date: "16.10.2024",
-      mainText:
-        "Seni kırdıysam bunun yükünü geçiştirmek istemiyorum. Eksik olan şey bahane değil, daha iyi davranmaktı. Bir şans daha verir misin sevgilim?",
+      mainText: "Bu sayfa sadece tatlı görünsün diye yapılmadı. Gerçekten bir şans daha isteyecek kadar ciddiyim.",
       questionTitle: "Benimle yeniden konuşur musun?",
-      questionDesc:
-        "Bir kere “evet” desen yeter. Gerisini ben halledeceğim.",
-      finalText:
-        "Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için daha dikkatli, daha temiz, daha doğru davranacağım."
+      questionDesc: "Sadece bir evet. Gerisini lafla değil, tavırla göstermek istiyorum.",
+      finalText: "Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için daha dikkatli davranacağım."
     };
 
     const noTexts = [
-      "Yine de hayır mı?",
-      "Bir daha düşün",
       "Emin misin?",
-      "Bence haksızlık bu",
-      "Az naz yeter :)",
-      "Bak evet çok iyi duruyor",
-      "Hayır seçeneği zayıflıyor",
-      "Artık tek mantıklı şık bu",
-      "Tamam, mecbur evet"
+      "Bir daha düşün",
+      "Yine de mi?",
+      "Bence hayır deme",
+      "Bak evet daha iyi",
+      "Az kaldı",
+      "Hayır zayıflıyor",
+      "Tek mantıklı şık kaldı"
     ];
 
     const subnotes = [
-      "Buna basmak aslında düşündüğünden kolay.",
-      "İnatlaşma, tasarım bile evetten yana.",
-      "Hayır tarafı pek ikna edici durmuyor.",
-      "Bak, evet ciddi ciddi daha iyi görünüyor.",
-      "Bu kadar naz premium pakete dahil değil.",
-      "Sistem objektif: evet daha şık.",
-      "Hayır giderek kendini sabote ediyor.",
-      "Artık olay estetikten çıktı, kader oldu."
+      "Buna basmak düşündüğünden kolay.",
+      "İnat kısmı biraz uzadı.",
+      "Tasarım bile evetten yana.",
+      "Hayır tarafı pek ikna edici değil.",
+      "Bak, görüntü olarak bile evet kazanıyor.",
+      "Naz kısmı biraz fazla oldu.",
+      "Artık olay estetikten çıktı.",
+      "Dürüst olalım: cevap ortada."
     ];
 
+    const shortName = document.getElementById("shortName");
     const dateText = document.getElementById("dateText");
     const mainText = document.getElementById("mainText");
     const questionTitle = document.getElementById("questionTitle");
@@ -624,9 +688,10 @@
     const finalScreen = document.getElementById("finalScreen");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
-    const buttonStage = document.getElementById("buttonStage");
-    const particles = document.getElementById("particles");
+    const stage = document.getElementById("stage");
+    const particleLayer = document.getElementById("particleLayer");
 
+    shortName.textContent = CONFIG.shortName;
     dateText.textContent = CONFIG.date;
     mainText.textContent = CONFIG.mainText;
     questionTitle.textContent = CONFIG.questionTitle;
@@ -634,7 +699,6 @@
     finalName.textContent = CONFIG.name;
     finalText.textContent = CONFIG.finalText;
     footerDate.textContent = CONFIG.date + " • yeni bir sayfa?";
-    document.querySelector(".mini-chip").textContent = "for " + CONFIG.shortName;
 
     let noCount = 0;
     let yesScale = 1;
@@ -643,22 +707,22 @@
       return Math.min(max, Math.max(min, value));
     }
 
-    function moveNoButton() {
-      const stage = buttonStage.getBoundingClientRect();
-      const btn = noBtn.getBoundingClientRect();
+    function moveNoButton(){
+      const stageRect = stage.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
 
-      const maxX = stage.width - btn.width - 12;
-      const maxY = stage.height - btn.height - 12;
+      const margin = 10;
+      const maxX = stageRect.width - btnRect.width - margin;
+      const maxY = stageRect.height - btnRect.height - margin;
 
       let x = Math.random() * maxX;
       let y = Math.random() * maxY;
 
-      // ortadaki evet butonuna çok yakın olmasın
-      const centerX = stage.width / 2;
-      const centerY = stage.height / 2 + 10;
+      const centerX = stageRect.width / 2;
+      const centerY = stageRect.height / 2;
 
-      if (Math.abs(x - centerX) < 70) x = x < centerX ? x - 60 : x + 60;
-      if (Math.abs(y - centerY) < 55) y = y < centerY ? y - 45 : y + 45;
+      if (Math.abs(x - centerX) < 70) x += x < centerX ? -55 : 55;
+      if (Math.abs(y - centerY) < 45) y += y < centerY ? -40 : 40;
 
       x = clamp(x, 10, maxX);
       y = clamp(y, 10, maxY);
@@ -668,77 +732,58 @@
       noBtn.style.transform = "translate(0,0)";
     }
 
-    function createBurst(count = 20){
-      for(let i = 0; i < count; i++){
+    function createParticles(amount){
+      for(let i = 0; i < amount; i++){
         const p = document.createElement("div");
         p.className = "particle";
-        const size = Math.random() * 10 + 6;
+        const size = Math.random() * 9 + 5;
         p.style.width = size + "px";
         p.style.height = size + "px";
         p.style.left = Math.random() * 100 + "vw";
-        p.style.bottom = "-20px";
-        p.style.animationDuration = (Math.random() * 5 + 5) + "s";
-        p.style.animationDelay = (Math.random() * 1.2) + "s";
-        particles.appendChild(p);
-        setTimeout(() => p.remove(), 9000);
+        p.style.animationDuration = (Math.random() * 3 + 4.5) + "s";
+        p.style.animationDelay = (Math.random() * 0.8) + "s";
+        particleLayer.appendChild(p);
+        setTimeout(() => p.remove(), 6500);
       }
     }
 
     function showFinal(){
       questionScreen.style.display = "none";
-      finalScreen.style.display = "flex";
-      createBurst(36);
-      let waves = 0;
-      const interval = setInterval(() => {
-        createBurst(10);
-        waves++;
-        if (waves > 4) clearInterval(interval);
+      finalScreen.classList.add("show");
+      createParticles(28);
+      let burst = 0;
+      const timer = setInterval(() => {
+        createParticles(8);
+        burst++;
+        if (burst > 3) clearInterval(timer);
       }, 700);
     }
 
     noBtn.addEventListener("click", () => {
       noCount++;
-      buttonStage.classList.remove("shake");
-      void buttonStage.offsetWidth;
-      buttonStage.classList.add("shake");
-
       yesScale += 0.16;
-      yesBtn.style.transform = `scale(${yesScale})`;
 
+      yesBtn.style.transform = `scale(${yesScale})`;
       yesBtn.style.boxShadow = `
-        0 16px 36px rgba(255,95,162,.35),
-        0 0 ${18 + noCount * 5}px rgba(255,95,162,.18),
+        0 14px 30px rgba(255,94,159,.34),
+        0 0 ${18 + noCount * 5}px rgba(255,94,159,.18),
         inset 0 1px 0 rgba(255,255,255,.28)
       `;
 
       noBtn.textContent = noTexts[Math.min(noCount - 1, noTexts.length - 1)];
       subnote.textContent = subnotes[Math.min(noCount - 1, subnotes.length - 1)];
 
-      if (noCount < 8){
+      if (noCount < 7) {
         moveNoButton();
       } else {
         noBtn.style.opacity = "0";
         noBtn.style.pointerEvents = "none";
-        yesBtn.style.transform = "scale(2.05)";
-        subnote.textContent = "Tamam. Artık dürüst olalım: tek doğru cevap ortada.";
+        yesBtn.style.transform = "scale(1.9)";
+        subnote.textContent = "Tamam. Artık tek düzgün seçenek kaldı.";
       }
     });
 
     yesBtn.addEventListener("click", showFinal);
-
-    // hafif arka plan partikülleri
-    for(let i = 0; i < 18; i++){
-      const p = document.createElement("div");
-      p.className = "particle";
-      const size = Math.random() * 8 + 4;
-      p.style.width = size + "px";
-      p.style.height = size + "px";
-      p.style.left = Math.random() * 100 + "vw";
-      p.style.bottom = Math.random() * 100 + "vh";
-      p.style.animationDuration = (Math.random() * 8 + 10) + "s";
-      p.style.animationDelay = (Math.random() * 8) + "s";
-      particles.appendChild(p);
-    }
   </script>
 </body>
 </html>
