@@ -3,265 +3,742 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barışalım mı?</title>
+  <title>Bir Şans Daha?</title>
+  <meta name="theme-color" content="#0f0a14" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    :root{
+      --bg-1:#0f0a14;
+      --bg-2:#1a1024;
+      --bg-3:#261327;
+      --glass:rgba(255,255,255,.08);
+      --glass-strong:rgba(255,255,255,.12);
+      --stroke:rgba(255,255,255,.14);
+      --text:#f8eef7;
+      --muted:#ccb9c8;
+      --pink:#ff5fa2;
+      --pink-2:#ff8bbb;
+      --pink-3:#ffc1da;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:28px;
     }
 
-    body {
-      min-height: 100vh;
-      background: linear-gradient(180deg, #fff5f7 0%, #ffe4ec 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: 24px;
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
     }
 
-    .card {
-      width: 100%;
-      max-width: 700px;
-      min-height: 420px;
-      background: rgba(255,255,255,0.82);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-      padding: 40px 28px;
-      position: relative;
-      text-align: center;
+    html,body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,95,162,.18), transparent 28%),
+        radial-gradient(circle at 80% 15%, rgba(255,139,187,.12), transparent 25%),
+        radial-gradient(circle at 75% 75%, rgba(145,88,255,.14), transparent 30%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+      overflow:hidden;
     }
 
-    .date {
-      font-size: 14px;
-      color: #a36b7d;
-      margin-bottom: 14px;
-      letter-spacing: 1px;
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      position:relative;
     }
 
-    h1 {
-      font-size: clamp(30px, 5vw, 48px);
-      color: #7a3048;
-      margin-bottom: 12px;
-      line-height: 1.15;
+    .noise,
+    .lights,
+    .particles{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
     }
 
-    p {
-      font-size: 18px;
-      color: #6b4a57;
-      max-width: 520px;
-      margin: 0 auto 34px;
-      line-height: 1.6;
+    .noise{
+      opacity:.05;
+      background-image:
+        radial-gradient(circle, #fff 1px, transparent 1px);
+      background-size:18px 18px;
+      mix-blend-mode:soft-light;
     }
 
-    .buttons-wrap {
-      position: relative;
-      width: 100%;
-      height: 180px;
-      margin-top: 10px;
+    .lights::before,
+    .lights::after{
+      content:"";
+      position:absolute;
+      width:38vmax;
+      height:38vmax;
+      border-radius:50%;
+      filter:blur(70px);
+      opacity:.22;
+      animation:floatGlow 10s ease-in-out infinite alternate;
     }
 
-    button {
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      font-weight: 700;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    .lights::before{
+      background:#ff4e95;
+      left:-10vmax;
+      top:-8vmax;
     }
 
-    #yesBtn {
-      background: #ff4d8d;
-      color: white;
-      padding: 18px 42px;
-      font-size: 22px;
-      transform: scale(1);
-      position: relative;
-      z-index: 2;
+    .lights::after{
+      background:#8e53ff;
+      right:-10vmax;
+      bottom:-12vmax;
+      animation-duration:13s;
     }
 
-    #yesBtn:hover {
-      transform: scale(1.06);
+    @keyframes floatGlow{
+      from{transform:translateY(-10px) translateX(0) scale(1);}
+      to{transform:translateY(18px) translateX(10px) scale(1.08);}
     }
 
-    #noBtn {
-      background: white;
-      color: #d14b7f;
-      border: 2px solid #ffd1e0;
-      padding: 16px 34px;
-      font-size: 20px;
-      position: absolute;
-      left: 58%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      z-index: 3;
+    .shell{
+      width:min(100%, 430px);
+      position:relative;
+      z-index:2;
     }
 
-    .center-area {
-      position: absolute;
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
+    .card{
+      position:relative;
+      overflow:hidden;
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid var(--stroke);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow:var(--shadow);
+      padding:22px 18px 18px;
+      min-height:720px;
     }
 
-    .final {
-      display: none;
-      animation: fadeIn 0.5s ease forwards;
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:inherit;
+      padding:1px;
+      background:linear-gradient(135deg, rgba(255,255,255,.24), rgba(255,255,255,0), rgba(255,95,162,.25));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+              mask-composite:exclude;
+      pointer-events:none;
     }
 
-    .final h2 {
-      font-size: clamp(34px, 6vw, 58px);
-      color: #ff4d8d;
-      margin-bottom: 14px;
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
     }
 
-    .final p {
-      font-size: 20px;
-      margin-bottom: 10px;
+    .badge,
+    .mini-chip{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:.3px;
+      padding:8px 12px;
+      backdrop-filter: blur(10px);
     }
 
-    .hearts {
-      font-size: 34px;
-      margin-top: 16px;
-      animation: float 1.4s infinite ease-in-out alternate;
+    .hero{
+      padding:8px 4px 4px;
+      position:relative;
+      z-index:2;
     }
 
-    .tiny-note {
-      margin-top: 16px;
-      font-size: 14px;
-      color: #a36b7d;
+    .eyebrow{
+      color:var(--pink-3);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+      margin-bottom:12px;
+      opacity:.92;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    h1{
+      margin:0 0 12px;
+      font-size:clamp(30px, 7vw, 44px);
+      line-height:1.02;
+      letter-spacing:-1.2px;
     }
 
-    @keyframes float {
-      from { transform: translateY(0px); }
-      to { transform: translateY(-8px); }
+    .gradient{
+      background:linear-gradient(135deg, #fff, #ffd3e5 35%, #ff89ba 75%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
     }
 
-    @media (max-width: 600px) {
-      .card {
-        padding: 28px 18px;
-        min-height: 500px;
-      }
+    .lead{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.65;
+    }
 
-      .buttons-wrap {
-        height: 240px;
-      }
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      margin:18px 0;
+    }
 
-      #yesBtn {
-        font-size: 20px;
-        padding: 16px 34px;
-      }
+    .memory{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      border-radius:22px;
+      padding:16px;
+      margin-bottom:18px;
+      position:relative;
+      overflow:hidden;
+    }
 
-      #noBtn {
-        font-size: 18px;
-        padding: 14px 24px;
-      }
+    .memory::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -40px auto;
+      width:120px;
+      height:120px;
+      background:radial-gradient(circle, rgba(255,95,162,.26), transparent 68%);
+      filter:blur(10px);
+      pointer-events:none;
+    }
+
+    .memory-title{
+      font-size:13px;
+      color:#f8d4e6;
+      opacity:.9;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .memory p{
+      margin:0;
+      font-size:14px;
+      line-height:1.65;
+      color:#ebdfe7;
+    }
+
+    .question{
+      padding:4px 2px 0;
+      text-align:center;
+    }
+
+    .question h2{
+      margin:0 0 8px;
+      font-size:24px;
+      letter-spacing:-.5px;
+    }
+
+    .question p{
+      margin:0 auto 18px;
+      max-width:300px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .button-stage{
+      position:relative;
+      height:240px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)),
+        radial-gradient(circle at top, rgba(255,95,162,.10), transparent 40%);
+      overflow:hidden;
+    }
+
+    .button-center{
+      position:absolute;
+      left:50%;
+      top:54%;
+      transform:translate(-50%,-50%);
+      z-index:2;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      border-radius:999px;
+      transition:transform .25s ease, box-shadow .25s ease, opacity .25s ease, background .25s ease;
+      touch-action:manipulation;
+    }
+
+    #yesBtn{
+      color:white;
+      background:linear-gradient(135deg, var(--pink), var(--pink-2));
+      box-shadow:
+        0 16px 36px rgba(255,95,162,.35),
+        inset 0 1px 0 rgba(255,255,255,.28);
+      font-size:20px;
+      padding:18px 34px;
+      min-width:148px;
+      position:relative;
+    }
+
+    #yesBtn::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:inherit;
+      background:linear-gradient(135deg, rgba(255,255,255,.45), rgba(255,255,255,0));
+      opacity:.3;
+      pointer-events:none;
+    }
+
+    #yesBtn:active{
+      transform:scale(.98);
+    }
+
+    #noBtn{
+      position:absolute;
+      left:58%;
+      top:54%;
+      transform:translate(-50%,-50%);
+      background:rgba(255,255,255,.08);
+      color:#ffe4ef;
+      border:1px solid rgba(255,255,255,.12);
+      padding:15px 24px;
+      font-size:16px;
+      z-index:3;
+      backdrop-filter: blur(10px);
+      box-shadow:0 8px 24px rgba(0,0,0,.18);
+      max-width:150px;
+      white-space:nowrap;
+    }
+
+    .subnote{
+      text-align:center;
+      font-size:12px;
+      color:#d8bfd0;
+      margin-top:14px;
+      opacity:.85;
+      min-height:18px;
+    }
+
+    .final{
+      display:none;
+      min-height:660px;
+      position:relative;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:30px 14px 16px;
+      flex-direction:column;
+      animation:fadeUp .6s ease both;
+    }
+
+    .halo{
+      width:168px;
+      height:168px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.55) 0%, rgba(255,193,218,.38) 20%, rgba(255,95,162,.20) 40%, transparent 68%);
+      filter:blur(6px);
+      position:absolute;
+      top:44px;
+      left:50%;
+      transform:translateX(-50%);
+      animation:pulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse{
+      0%,100%{transform:translateX(-50%) scale(1); opacity:.9;}
+      50%{transform:translateX(-50%) scale(1.08); opacity:1;}
+    }
+
+    .final-mark{
+      position:relative;
+      z-index:2;
+      width:116px;
+      height:116px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-size:44px;
+      background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 18px 50px rgba(0,0,0,.24);
+      margin-bottom:22px;
+    }
+
+    .final h3{
+      position:relative;
+      z-index:2;
+      margin:0 0 10px;
+      font-size:34px;
+      letter-spacing:-1px;
+    }
+
+    .final .name{
+      background:linear-gradient(135deg, #fff, #ffd9ea 40%, #ff8fbd 85%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .final .bigline{
+      position:relative;
+      z-index:2;
+      margin:0 0 14px;
+      color:#f1dfea;
+      font-size:16px;
+      line-height:1.7;
+      max-width:290px;
+    }
+
+    .promise{
+      position:relative;
+      z-index:2;
+      width:100%;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      padding:16px;
+      text-align:left;
+      max-width:320px;
+    }
+
+    .promise-title{
+      font-size:13px;
+      color:#ffd7e6;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    .promise ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:10px;
+    }
+
+    .promise li{
+      color:#ebdfe7;
+      font-size:14px;
+      line-height:1.5;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .promise li span{
+      width:22px;
+      height:22px;
+      display:inline-grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(255,95,162,.14);
+      border:1px solid rgba(255,95,162,.20);
+      flex:0 0 22px;
+      font-size:12px;
+    }
+
+    .footer-note{
+      position:relative;
+      z-index:2;
+      margin-top:16px;
+      color:#cdb7c6;
+      font-size:12px;
+      opacity:.9;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(16px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .particle{
+      position:absolute;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0));
+      opacity:.4;
+      animation:rise linear infinite;
+    }
+
+    @keyframes rise{
+      from{transform:translateY(20px) scale(.8); opacity:0;}
+      15%{opacity:.35;}
+      to{transform:translateY(-120vh) scale(1.4); opacity:0;}
+    }
+
+    .shake{
+      animation:shake .25s linear;
+    }
+
+    @keyframes shake{
+      0%,100%{transform:translateX(0);}
+      25%{transform:translateX(-4px);}
+      50%{transform:translateX(4px);}
+      75%{transform:translateX(-2px);}
+    }
+
+    @media (max-width:380px){
+      .card{min-height:690px;padding:18px 14px 14px;}
+      .button-stage{height:220px;}
+      #yesBtn{font-size:18px;padding:16px 28px;min-width:136px;}
+      #noBtn{font-size:15px;padding:14px 20px;}
+      h1{font-size:29px;}
     }
   </style>
 </head>
 <body>
-  <div class="card" id="mainCard">
-    <div id="questionArea">
-      <div class="date">16.10.2024</div>
-      <h1>Seni üzdüğüm için özür dilerim.</h1>
-      <p>
-        Gerçekten kırdıysam bunu telafi etmek istiyorum.
-        Bir şans daha verir misin… barışalım mı?
-      </p>
+  <div class="noise"></div>
+  <div class="lights"></div>
+  <div class="particles" id="particles"></div>
 
-      <div class="buttons-wrap" id="buttonsWrap">
-        <div class="center-area">
-          <button id="yesBtn">Evet</button>
+  <div class="shell">
+    <div class="card">
+      <section id="questionScreen">
+        <div class="topbar">
+          <div class="badge" id="dateText">16.10.2024</div>
+          <div class="mini-chip">for E</div>
         </div>
-        <button id="noBtn">Hayır</button>
-      </div>
 
-      <div class="tiny-note">Bu sefer kaçış yok gibi :)</div>
-    </div>
+        <div class="hero">
+          <div class="eyebrow">bir şey söylemek istiyorum</div>
+          <h1>
+            Bu sefer <span class="gradient">gerçekten</span><br />
+            düzgün anlatacağım.
+          </h1>
+          <p class="lead">
+            Bazı şeyleri yanlış yaptım. Lafı uzatmadan, savunmaya kaçmadan,
+            sadece şunu söylemek istiyorum:
+          </p>
+        </div>
 
-    <div class="final" id="finalArea">
-      <h2>Yuppi 🤍</h2>
-      <p>Bir şans verdiğin için teşekkür ederim.</p>
-      <p>Seni üzmek değil, mutlu etmek istiyorum.</p>
-      <div class="hearts">🤍✨🤍</div>
-      <div class="tiny-note">Bu ekranı görünce sarılma hakkım doğdu.</div>
+        <div class="divider"></div>
+
+        <div class="memory">
+          <div class="memory-title">Not</div>
+          <p id="mainText">
+            Seni kırdıysam bunun yükünü geçiştirmek istemiyorum.
+            Eksik olan şey bahane değil, daha iyi davranmaktı.
+            Bir şans daha verir misin sevgilim?
+          </p>
+        </div>
+
+        <div class="question">
+          <h2 id="questionTitle">Benimle yeniden güler misin?</h2>
+          <p id="questionDesc">
+            Bir kere “evet” desen yeter. Gerisini ben halledicem.
+          </p>
+
+          <div class="button-stage" id="buttonStage">
+            <div class="button-center">
+              <button id="yesBtn">Evet</button>
+            </div>
+            <button id="noBtn">Hayır</button>
+          </div>
+
+          <div class="subnote" id="subnote">Buna basmak aslında düşündüğünden kolay.</div>
+        </div>
+      </section>
+
+      <section class="final" id="finalScreen">
+        <div class="halo"></div>
+        <div class="final-mark">♡</div>
+        <h3><span class="name" id="finalName">Esma</span>, teşekkür ederim.</h3>
+        <p class="bigline" id="finalText">
+          Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için
+          daha dikkatli, daha temiz, daha doğru davranacağım.
+        </p>
+
+        <div class="promise">
+          <div class="promise-title">Sana hissettirmek istediğim şey:</div>
+          <ul>
+            <li><span>✓</span> değersiz değil, kıymetli olduğunu</li>
+            <li><span>✓</span> yorulmuş değil, huzurlu olman gerektiğini</li>
+            <li><span>✓</span> söz değil, emek gördüğünü</li>
+          </ul>
+        </div>
+
+        <div class="footer-note" id="footerDate">16.10.2024 • yeni bir sayfa?</div>
+      </section>
     </div>
   </div>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
+    const CONFIG = {
+      name: "Esma",
+      shortName: "E",
+      date: "16.10.2024",
+      mainText:
+        "Seni kırdıysam bunun yükünü geçiştirmek istemiyorum. Eksik olan şey bahane değil, daha iyi davranmaktı. Bir şans daha verir misin sevgilim?",
+      questionTitle: "Benimle yeniden konuşur musun?",
+      questionDesc:
+        "Bir kere “evet” desen yeter. Gerisini ben halledeceğim.",
+      finalText:
+        "Bu sefer laf kalabalığı değil, netlik. İyi hissettirmek için daha dikkatli, daha temiz, daha doğru davranacağım."
+    };
+
+    const noTexts = [
+      "Yine de hayır mı?",
+      "Bir daha düşün",
+      "Emin misin?",
+      "Bence haksızlık bu",
+      "Az naz yeter :)",
+      "Bak evet çok iyi duruyor",
+      "Hayır seçeneği zayıflıyor",
+      "Artık tek mantıklı şık bu",
+      "Tamam, mecbur evet"
+    ];
+
+    const subnotes = [
+      "Buna basmak aslında düşündüğünden kolay.",
+      "İnatlaşma, tasarım bile evetten yana.",
+      "Hayır tarafı pek ikna edici durmuyor.",
+      "Bak, evet ciddi ciddi daha iyi görünüyor.",
+      "Bu kadar naz premium pakete dahil değil.",
+      "Sistem objektif: evet daha şık.",
+      "Hayır giderek kendini sabote ediyor.",
+      "Artık olay estetikten çıktı, kader oldu."
+    ];
+
+    const dateText = document.getElementById("dateText");
+    const mainText = document.getElementById("mainText");
+    const questionTitle = document.getElementById("questionTitle");
+    const questionDesc = document.getElementById("questionDesc");
+    const finalName = document.getElementById("finalName");
+    const finalText = document.getElementById("finalText");
+    const footerDate = document.getElementById("footerDate");
+    const subnote = document.getElementById("subnote");
+    const questionScreen = document.getElementById("questionScreen");
+    const finalScreen = document.getElementById("finalScreen");
     const yesBtn = document.getElementById("yesBtn");
-    const buttonsWrap = document.getElementById("buttonsWrap");
-    const questionArea = document.getElementById("questionArea");
-    const finalArea = document.getElementById("finalArea");
+    const noBtn = document.getElementById("noBtn");
+    const buttonStage = document.getElementById("buttonStage");
+    const particles = document.getElementById("particles");
+
+    dateText.textContent = CONFIG.date;
+    mainText.textContent = CONFIG.mainText;
+    questionTitle.textContent = CONFIG.questionTitle;
+    questionDesc.textContent = CONFIG.questionDesc;
+    finalName.textContent = CONFIG.name;
+    finalText.textContent = CONFIG.finalText;
+    footerDate.textContent = CONFIG.date + " • yeni bir sayfa?";
+    document.querySelector(".mini-chip").textContent = "for " + CONFIG.shortName;
 
     let noCount = 0;
     let yesScale = 1;
 
-    const noTexts = [
-      "Emin misin?",
-      "Bir daha düşün",
-      "Bence tekrar bak",
-      "Kalbim kırılıyor :(",
-      "Son kararın mı?",
-      "Bak evet daha mantıklı",
-      "Hayır deme ya",
-      "Bence evet basılmalı",
-      "Mecbur evet gibi duruyor",
-    ];
+    function clamp(value, min, max){
+      return Math.min(max, Math.max(min, value));
+    }
 
     function moveNoButton() {
-      const wrapRect = buttonsWrap.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+      const stage = buttonStage.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
 
-      const maxX = wrapRect.width - btnRect.width - 10;
-      const maxY = wrapRect.height - btnRect.height - 10;
+      const maxX = stage.width - btn.width - 12;
+      const maxY = stage.height - btn.height - 12;
 
-      const x = Math.max(10, Math.random() * maxX);
-      const y = Math.max(10, Math.random() * maxY);
+      let x = Math.random() * maxX;
+      let y = Math.random() * maxY;
 
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
+      // ortadaki evet butonuna çok yakın olmasın
+      const centerX = stage.width / 2;
+      const centerY = stage.height / 2 + 10;
+
+      if (Math.abs(x - centerX) < 70) x = x < centerX ? x - 60 : x + 60;
+      if (Math.abs(y - centerY) < 55) y = y < centerY ? y - 45 : y + 45;
+
+      x = clamp(x, 10, maxX);
+      y = clamp(y, 10, maxY);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
       noBtn.style.transform = "translate(0,0)";
+    }
+
+    function createBurst(count = 20){
+      for(let i = 0; i < count; i++){
+        const p = document.createElement("div");
+        p.className = "particle";
+        const size = Math.random() * 10 + 6;
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.bottom = "-20px";
+        p.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        p.style.animationDelay = (Math.random() * 1.2) + "s";
+        particles.appendChild(p);
+        setTimeout(() => p.remove(), 9000);
+      }
+    }
+
+    function showFinal(){
+      questionScreen.style.display = "none";
+      finalScreen.style.display = "flex";
+      createBurst(36);
+      let waves = 0;
+      const interval = setInterval(() => {
+        createBurst(10);
+        waves++;
+        if (waves > 4) clearInterval(interval);
+      }, 700);
     }
 
     noBtn.addEventListener("click", () => {
       noCount++;
+      buttonStage.classList.remove("shake");
+      void buttonStage.offsetWidth;
+      buttonStage.classList.add("shake");
 
-      yesScale += 0.18;
+      yesScale += 0.16;
       yesBtn.style.transform = `scale(${yesScale})`;
 
-      noBtn.textContent = noTexts[Math.min(noCount - 1, noTexts.length - 1)];
+      yesBtn.style.boxShadow = `
+        0 16px 36px rgba(255,95,162,.35),
+        0 0 ${18 + noCount * 5}px rgba(255,95,162,.18),
+        inset 0 1px 0 rgba(255,255,255,.28)
+      `;
 
-      if (noCount < 8) {
+      noBtn.textContent = noTexts[Math.min(noCount - 1, noTexts.length - 1)];
+      subnote.textContent = subnotes[Math.min(noCount - 1, subnotes.length - 1)];
+
+      if (noCount < 8){
         moveNoButton();
       } else {
         noBtn.style.opacity = "0";
         noBtn.style.pointerEvents = "none";
-        noBtn.textContent = "";
-        yesBtn.style.transform = "scale(2.2)";
+        yesBtn.style.transform = "scale(2.05)";
+        subnote.textContent = "Tamam. Artık dürüst olalım: tek doğru cevap ortada.";
       }
     });
 
-    yesBtn.addEventListener("click", () => {
-      questionArea.style.display = "none";
-      finalArea.style.display = "block";
-    });
+    yesBtn.addEventListener("click", showFinal);
+
+    // hafif arka plan partikülleri
+    for(let i = 0; i < 18; i++){
+      const p = document.createElement("div");
+      p.className = "particle";
+      const size = Math.random() * 8 + 4;
+      p.style.width = size + "px";
+      p.style.height = size + "px";
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.bottom = Math.random() * 100 + "vh";
+      p.style.animationDuration = (Math.random() * 8 + 10) + "s";
+      p.style.animationDelay = (Math.random() * 8) + "s";
+      particles.appendChild(p);
+    }
   </script>
 </body>
 </html>
